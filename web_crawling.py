@@ -24,33 +24,50 @@ products = []
 eans = []
 manufacturers = []
 
-for i in range(25):
-    next_button = browser.find_element_by_id('DataTables_Table_0_next')
+wait = WebDriverWait(browser, 10)
 
-    # find_elements_by_xpath returns an array of selenium objects. (Product Names)
-    products_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[3]/a')
-    for x in products_element:
-        products.append(x.text)
+page_info = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0_info"]')
 
-    # find_elements_by_xpath returns an array of selenium objects. (EANS)
-    EANS_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[4]')
-    for x in EANS_element:
-        eans.append(x.text)
+# Parse every page, except the last one.
+for y in page_info:
+    while y.text[19:24] != y.text[34:39]:
+        next_button = browser.find_element_by_id('DataTables_Table_0_next')
 
-    # find_elements_by_xpath returns an array of selenium objects. (Manufacturers)
-    manufacturers_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[5]')
-    for x in manufacturers_element:
-        manufacturers.append(x.text)
+        # (Product Names)
+        products_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[3]/a')
+        for x in products_element:
+            products.append(x.text)
 
-    next_button.click()
-    i += 1
+        # (EANS)
+        EANS_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[4]')
+        for x in EANS_element:
+            eans.append(x.text)
+
+        # (Manufacturers)
+        manufacturers_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[5]')
+        for x in manufacturers_element:
+            manufacturers.append(x.text)
+        next_button.click()
+
+# Parse the last page.
+products_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[3]/a')
+for x in products_element:
+    products.append(x.text)
+
+EANS_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[4]')
+for x in EANS_element:
+    eans.append(x.text)
+
+manufacturers_element = browser.find_elements_by_xpath('//*[@id="DataTables_Table_0"]/tbody/tr/td[5]')
+for x in manufacturers_element:
+    manufacturers.append(x.text)
 
 # Create the file - date will be included in its name.
-file = 'CZ_CechovniNormy_' + time.strftime('%Y%m%d') + '.ibs-utf8'
+file = 'CZ_Cechovninormy_' + time.strftime('%Y%m%d') + '.txt'
 
 # Write the header of the file.
 with open(file, 'w', encoding="utf-8") as f:
-    f.write('CZ\tCPSHub\tCechovniNormy.cz\tPublic\n')
+    f.write('CZ\tCPSHub\tCechovninormy.cz\tPublic\n')
 
 # Write the contents of the file.
 with open(file, 'a', encoding="utf-8") as f:
