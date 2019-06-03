@@ -7,7 +7,7 @@ from selenium.common.exceptions import TimeoutException
 
 option = webdriver.ChromeOptions()
 
-browser = webdriver.Chrome(executable_path="C:\\Users\\andiac\\Desktop\\chromedriver_win32\\chromedriver.exe", chrome_options=option)
+browser = webdriver.Chrome(executable_path="D:\\chromedriver_win32\\chromedriver.exe", chrome_options=option)
 
 browser.get("https://www.cechovninormy.cz/vyrobky/")
 
