@@ -1,9 +1,15 @@
+#!python3
+
 import time
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+
+monthstr = time.strftime('%Y%m')
+directory = os.path.dirname("C:\\wamp\\www\\crawler\\Programare\\Outputs\\" + monthstr + "\\CS\\")
 
 option = webdriver.ChromeOptions()
 
@@ -11,8 +17,8 @@ browser = webdriver.Chrome(executable_path="D:\\chromedriver_win32\\chromedriver
 
 browser.get("https://www.cechovninormy.cz/vyrobky/")
 
-# Wait 20 seconds for page to load
-timeout = 20
+# Wait 40 seconds for page to load
+timeout = 40
 try:
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="execphp-2"]/div/div/div[3]/a/img')))
 except TimeoutException:
@@ -66,7 +72,10 @@ for x in manufacturers_element:
 file = 'CZ_Cechovninormy_' + time.strftime('%Y%m%d') + '.txt'
 
 # Write the header of the file.
-with open(file, 'w', encoding="utf-8") as f:
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
+with open(directory + '\\' + file, 'w', encoding="utf-8") as f:
     f.write('CZ\tCPSHub\tCechovninormy.cz\tPublic\n')
 
 # Write the contents of the file.
@@ -76,3 +85,6 @@ with open(file, 'a', encoding="utf-8") as f:
             f.write(f"{ean}" + '\t' + f"{product}" + ' | ' + f"{manufacturer}" + '\n')
 
 print('File has been written!')
+
+browser.close()
+browser.quit()
