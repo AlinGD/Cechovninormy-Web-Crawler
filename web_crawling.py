@@ -1,14 +1,16 @@
 #!python3
 
 import time
+import datetime
 import os
+from datetime import timedelta
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-monthstr = time.strftime('%Y%m')
+monthstr = (datetime.datetime.now() + datetime.timedelta(days=32)).strftime('%Y%m') 
 directory = os.path.dirname("C:\\wamp\\www\\crawler\\Programare\\Outputs\\" + monthstr + "\\CS\\")
 
 option = webdriver.ChromeOptions()
@@ -79,7 +81,7 @@ with open(directory + '\\' + file, 'w', encoding="utf-8") as f:
     f.write('CZ\tCPSHub\tCechovninormy.cz\tPublic\n')
 
 # Write the contents of the file.
-with open(file, 'a', encoding="utf-8") as f:
+with open(directory + '\\' + file, 'a', encoding="utf-8") as f:
     for product, ean, manufacturer in zip(products, eans, manufacturers):
         if ean:
             f.write(f"{ean}" + '\t' + f"{product}" + ' | ' + f"{manufacturer}" + '\n')
